@@ -1,4 +1,4 @@
-pipeline { 
+pipeline {
     agent any 
     environment {
         //APP_NAME = 'my-app'
@@ -19,19 +19,19 @@ pipeline {
         }
              
         stage('Build Docker Image') {
-          agent {
-            docker {
-              image 'nginx:1.27-alpine'
-                args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+            agent {
+                docker {
+                  image 'nginx:1.27-alpine'
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
+                }
+            }           
+            steps {
+                script {
+                  withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh 'docker --version'   
+                  }  
+                }
             }
-          }           
-          steps {
-            script {
-              withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                sh 'docker --version'   
-              }  
-            }
-          }
         }
     }
 }

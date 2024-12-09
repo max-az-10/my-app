@@ -28,13 +28,13 @@ pipeline {
           steps {
             script {
               withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                sh 'docker build -t my-app-image .'   
+                sh 'docker --version'   
               }  
             }
           }
         }
         
-        stage('Login to ECR') {
+        //*stage('Login to ECR') {
           steps {
             withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
               sh 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492139836.dkr.ecr.us-west-2.amazonaws.com'
@@ -54,3 +54,4 @@ pipeline {
         }
     }
 }
+*//

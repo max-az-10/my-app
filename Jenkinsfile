@@ -31,6 +31,7 @@ pipeline {
               }  
             }
           }
+        }
         
         stage('Login to ECR') {
           steps {

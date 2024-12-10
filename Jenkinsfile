@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     tools {
-        SonarQube 'SonarQube-Server'  // Name of the SonarScanner tool configured in Jenkins
+        sonarQubeScanner 'SonarQube-Server'  // Name of the SonarScanner tool configured in Jenkins
     }
     
     environment {
@@ -27,7 +27,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {  // Use the SonarQube configuration in Jenkins
+                withSonarQubeEnv('SonarQube-Server') {  // Use the SonarQube configuration in Jenkins
                     sh '''
                         sonar-scanner \
                             -Dsonar.projectKey=html-analysis \

@@ -1,8 +1,7 @@
 pipeline {
     agent any 
-
     tools {
-        sonarQube 'SonarQube-Server'
+        sonarQube 'SonarQube-Server' // Make sure the SonarQube server is configured in Jenkins
     }
     environment {
         AWS_REGION = 'us-west-2'

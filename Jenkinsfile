@@ -3,9 +3,11 @@ pipeline {
     environment {
         AWS_REGION = 'us-west-2'
         AWS_DOCKER_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
-        //AWS_ECS_TD = ''
-        //ECS_CLUSTER = '' 
-        //ECS_SERVICE = '' 
+        IMAGE_NAME = 'my-app-image'  // Updated image name
+        IMAGE_TAG = "${GIT_COMMIT}"   // Using Git commit hash as the tag
+        //ECS_CLUSTER = 'your-ecs-cluster-name'
+        //ECS_TASK_DEFINITION = 'task de name'
+        //ECS_SERVICE = 'your-ecs-service-name' 
     } 
 
     stages {
@@ -23,7 +25,7 @@ pipeline {
                 script {
                     // Verify that Docker is available and working
                     sh 'docker --version'
-                    sh 'docker build -t my-app-repo .'
+                    sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
                 }
             }
         }
@@ -40,8 +42,8 @@ pipeline {
             steps { 
                 withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
-                        docker tag my-app-repo:latest 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
-                        docker push 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
+                        docker tag $IMAGE_NAME:$IMAGE_TAG $AWS_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        docker push $AWS_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
                     '''
                 } 
             } 

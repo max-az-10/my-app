@@ -54,8 +54,9 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh ''' 
                         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment --region $AWS_REGION 
-                }    '''
-            }
-        } 
+                   '''
+                }
+            } 
+        }
     }
 }

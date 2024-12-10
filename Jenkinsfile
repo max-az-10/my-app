@@ -18,18 +18,11 @@ pipeline {
             } 
         }
              
-        stage('Build Docker Image') {
-            agent {
-                docker {
-                  image 'nginx:1.27-alpine'
-                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
-                }
-            }           
+        stage('Verify Docker') {
             steps {
                 script {
-                  withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                    sh 'docker --version'   
-                  }  
+                    // Verify that Docker is available and working
+                    sh 'docker --version'
                 }
             }
         }

@@ -1,6 +1,9 @@
 pipeline {
     agent any 
-    
+
+    tools {
+        sonarQube 'SonarQube-Server'
+    }
     environment {
         AWS_REGION = 'us-west-2'
         AWS_DOCKER_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'

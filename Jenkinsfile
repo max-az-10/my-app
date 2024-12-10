@@ -5,9 +5,9 @@ pipeline {
         AWS_DOCKER_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
         IMAGE_NAME = 'my-app-repo'  // Updated image name
         IMAGE_TAG = "${GIT_COMMIT}"   // Using Git commit hash as the tag
-        //ECS_CLUSTER = 'your-ecs-cluster-name'
-        //ECS_TASK_DEFINITION = 'task de name'
-        //ECS_SERVICE = 'your-ecs-service-name' 
+        ECS_CLUSTER = 'my-app-cluster'
+        ECS_TASK_DEFINITION = 'my-app-taskdef'
+        ECS_SERVICE = 'my-app-service'
     } 
 
     stages {
@@ -48,5 +48,14 @@ pipeline {
                 } 
             } 
         }
+
+        stage('Deploy to ECS') {
+            steps { 
+                withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh ''' 
+                        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment --region $AWS_REGION 
+                }    '''
+            }
+        } 
     }
 }

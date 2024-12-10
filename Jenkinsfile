@@ -1,6 +1,5 @@
 pipeline {
     agent any 
-    
     environment {
         AWS_REGION = 'us-west-2'
         AWS_DOCKER_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
@@ -8,10 +7,9 @@ pipeline {
         IMAGE_TAG = "${GIT_COMMIT}"   // Using Git commit hash as the tag
         //ECS_CLUSTER = 'your-ecs-cluster-name'
         //ECS_TASK_DEFINITION = 'task de name'
-        //ECS_SERVICE = 'your-ecs-service-name'
-        SONAR_TOKEN = credentials('Sonar-Token')  // Add the token as a Jenkins credential
-    }
-    
+        //ECS_SERVICE = 'your-ecs-service-name' 
+    } 
+
     stages {
       
         stage('Checkout Git') { 
@@ -21,29 +19,7 @@ pipeline {
                 } 
             } 
         }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                        sh '''
-                            sonar-scanner \
-                              -Dsonar.projectKey=html-analysis \
-                              -Dsonar.sources=. \
-                              -Dsonar.host.url=http://18.237.50.187:9000 \
-                              -Dsonar.login=$SONAR_TOKEN
-                        '''
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true  // Wait for the quality gate result
-                }
-            }
-        }
-        
+             
         stage('Verify Docker') {
             steps {
                 script {

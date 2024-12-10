@@ -1,8 +1,5 @@
 pipeline {
     agent any 
-    tools {
-        sonarQubeScanner 'SonarQube-Server'  // Name of the SonarScanner tool configured in Jenkins
-    }
     
     environment {
         AWS_REGION = 'us-west-2'

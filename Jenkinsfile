@@ -40,7 +40,7 @@ pipeline {
             steps { 
                 withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
-                        docker tag my-app-image:latest $AWS_DOCKER_REGISTRY/my-app-repo:latest
+                        docker tag my-app-repo:latest $AWS_DOCKER_REGISTRY/my-app-repo:latest
                         docker push $AWS_DOCKER_REGISTRY/my-app-repo:latest
                     '''
                 } 

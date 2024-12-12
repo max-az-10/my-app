@@ -3,7 +3,7 @@ pipeline {
     environment {
         SONAR_PROJECT_KEY = 'Onix-Website'
         SONAR_SCANNER_HOME = tool 'SonarQube Scanner'
-    }   
+    }
     stages {
         stage('checkout git') {
             steps {
@@ -16,14 +16,14 @@ pipeline {
                     withSonarQubeEnv('SonarQube') {
                         sh """
                             sonar-scanner \
-                                -Dsonar.projectKey=Onix-Website \
+                                -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=http://35.165.3.57:9000 \
                                 -Dsonar.scanner.timeout=600 \
-                                -Dsonar.login=${Sonar-T} 
+                                -Dsonar.login=${env.Sonar-T}
                         """
                     }
-                }         
+                }
             }
         }
     }

@@ -37,6 +37,16 @@ pipeline {
                 }
             }
         }
+        stage('SSH to Remote Server') {
+            steps {
+                sshagent(['Jenkins-SSH-Key']) {
+                    script {
+                        // Your SSH commands or scripts go here
+                        sh "ssh ubuntu@35.165.3.57 'echo Hello from Jenkins'"
+                    }
+                }
+            }
+        }
         stage('Trivy Scan on Remote Server') {
             steps {
                 sshagent(['Jenkins-SSH-Key']) {

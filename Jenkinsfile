@@ -37,6 +37,12 @@ pipeline {
                 }
             }
         }
-       
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    sh 'trivy image --severity HIGH,MEDIUM --format table -o trivy-report.html ${ECR_REPO}:${IMAGE_TAG}'
+                }
+            }
+        }
     }
 }

@@ -49,13 +49,12 @@ pipeline {
         }
         stage('Login & Push to ECR') {
             steps {
-                    withCredentials([usernamePassword(credentialsId: 'AWS-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {    
-                            sh """
-                                aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492139836.dkr.ecr.us-west-2.amazonaws.com
-                                docker push 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
-                            """
-                        }
-                    }
+                withCredentials([usernamePassword(credentialsId: 'AWS-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {    
+                    sh """
+                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492139836.dkr.ecr.us-west-2.amazonaws.com
+                        docker push 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
+                    """
+                }
             }
         }    
     }

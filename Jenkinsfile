@@ -47,5 +47,17 @@ pipeline {
                     }
             }
         }
+        stage('Login & Push to ECR') {
+            steps {
+                    withcrede    
+                        script {
+                            sh """
+                                aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492139836.dkr.ecr.us-west-2.amazonaws.com
+                                docker push 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
+                            """
+                        }
+            }
+        }
+        
     }
 }

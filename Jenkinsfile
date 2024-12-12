@@ -37,27 +37,14 @@ pipeline {
                 }
             }
         }
-        stage('SSH to Remote Server') {
-            steps {
-                sshagent(['Jenkins-SSH-Key']) {
-                    script {
-                        // Your SSH commands or scripts go here                        
-                        sh "ssh ${REMOTE_USER}@${REMOTE_HOST} 'echo $PATH'"
-                        sh "ssh ubuntu@35.165.3.57 'echo Hello from Jenkins'"
-                    }
-                }
-            }
-        }
         stage('Trivy Scan on Remote Server') {
             steps {
-                sshagent(['Jenkins-SSH-Key']) {
                     script {
-                        sh """      
+                        sh """
                             # Run Trivy to scan the Docker image and save the report
                             trivy image --severity HIGH,MEDIUM --format table -o trivy-report.html ${TRIVY_IMAGE}
                         """
                     }
-                }
             }
         }
     }

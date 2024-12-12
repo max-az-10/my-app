@@ -4,9 +4,9 @@ pipeline {
     
     environment {
         SONAR_SCANNER_HOME = tool 'SonarQube Scanner'
-        //IMAGE_TAG = 'latest'
-        //AWS_ECR_REPO = 'my-app-repo'
-        //AWS_ECR_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
+        IMAGE_TAG = 'latest'
+        ECR_REPO = 'my-app-repo'
+        ECR_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
         //ECS_CLUSTER = ''
         //ECS_SERVICE = ''
         //REMOTE_HOST = '35.165.3.57'
@@ -31,8 +31,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        docker build -t my-app-repo .
-                        docker tag my-app-repo:latest 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
+                        docker build -t ${ECR_REPO}:${IMAGE_TAG} .
+                        docker tag ${ECR_REPO}:${IMAGE_TAG} ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}
                     '''
                 }
             }

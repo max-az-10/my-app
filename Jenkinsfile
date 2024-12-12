@@ -15,12 +15,12 @@ pipeline {
                 withCredentials([string(credentialsId: 'Sonar-Token', variable: 'Sonar-T')]) {
                     withSonarQubeEnv('SonarQube') {
                         sh """
-                            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectKey=Onix-Website \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://35.165.3.57:9000/ \
-                            -Dsonar.scanner.timeout=600 \
-                            -Dsonar.login=$Sonar-T
+                            sonar-scanner \
+                                -Dsonar.projectKey=Onix-Website \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=http://35.165.3.57:9000 \
+                                -Dsonar.scanner.timeout=600 \
+                                -Dsonar.login=\$Sonar-T
                         """
                     }
                 }         

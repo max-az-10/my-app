@@ -43,6 +43,7 @@ pipeline {
                     script {
                         // Your SSH commands or scripts go here
                         sh "ssh ubuntu@35.165.3.57 'echo Hello from Jenkins'"
+                        sh "ssh ${REMOTE_USER}@${REMOTE_HOST} 'echo $PATH'"
                     }
                 }
             }

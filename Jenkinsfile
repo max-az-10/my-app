@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SONAR_PROJECT_KEY = 'Onix-Website'
-        SONAR_SCANNER_HOME = tool 'SonarQube-Scanner'
+        SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
     }   
     stages {
         stage('checkout git') {
@@ -12,8 +12,8 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'Sonar-Token1', variable: 'SONAR_TOKEN')]) {
-                    withSonarQubeEnv('SonarQube@') {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    withSonarQubeEnv('SonarQube') {
                         sh """
                         ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=${SONAR_PROJECT_KEY} \

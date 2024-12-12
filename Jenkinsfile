@@ -11,19 +11,9 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'Sonar-Token', variable: 'SONAR_TOKEN')]) {
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            sonar-scanner \
-                                -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=http://35.165.3.57:9000 \
-                                -Dsonar.scanner.timeout=600 \
-                                -Dsonar.login=${SONAR_TOKEN}
-                        """
-                    }
-                }
+            def scannerHome = tool 'SonarQube Scanner';
+            withSonarQubeEnv() {
+              sh "${scannerHome}/bin/sonar-scanner"
             }
         }
     }

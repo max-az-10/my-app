@@ -12,19 +12,19 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'Sonar-Token', variable: 'Sonar-T')]) {
                     withSonarQubeEnv('SonarQube') {
                         sh """
                             ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.projectKey=Onix-Website \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://172.30.56.3:9000 \
+                            -Dsonar.host.url=http://35.165.3.57:9000/ \
                             -Dsonar.scanner.timeout=600 \
-                            -Dsonar.login=\$SONAR_TOKEN
+                            -Dsonar.login=$Sonar-T
                         """
                     }
                 }         
             }
         }
-    }  
+    }
 }

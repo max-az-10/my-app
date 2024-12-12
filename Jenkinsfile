@@ -9,9 +9,9 @@ pipeline {
         ECR_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
         //ECS_CLUSTER = ''
         //ECS_SERVICE = ''
-        //REMOTE_HOST = '35.165.3.57'
-        //REMOTE_USER = 'ubuntu'
-        //TRIVY_IMAGE = 'your-docker-image'
+        REMOTE_HOST = '35.165.3.57'
+        REMOTE_USER = 'ubuntu'
+        TRIVY_IMAGE = "${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
     }
     
     stages {        
@@ -40,7 +40,9 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 script {
-                    sh 'trivy image --severity HIGH,MEDIUM --format table -o trivy-report.html ${ECR_REPO}:${IMAGE_TAG}'
+                    sh """
+                        trivy image --severity HIGH,MEDIUM --format table -o trivy-report.html ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}
+                    """
                 }
             }
         }

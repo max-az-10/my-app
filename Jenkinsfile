@@ -12,7 +12,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'Sonar-Token', variable: 'Sonar-T')]) {
+                withCredentials([string(credentialsId: 'Sonar-Token', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
                         sh """
                             sonar-scanner \
@@ -20,7 +20,7 @@ pipeline {
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=http://35.165.3.57:9000 \
                                 -Dsonar.scanner.timeout=600 \
-                                -Dsonar.login=${env.Sonar-T}
+                                -Dsonar.login=${SONAR_TOKEN}
                         """
                     }
                 }

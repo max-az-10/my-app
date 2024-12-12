@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SONAR_PROJECT_KEY = 'Onix-Website'
-        SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
+        SONAR_SCANNER_HOME = tool 'SonarQube Scanner'
     }   
     stages {
         stage('checkout git') {
@@ -13,14 +13,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh """
-                        /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner sonar-scanner \
-                        -Dsonar.projectKey=Onix-Website \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://172.30.56.3:9000 \
-                        -Dsonar.scanner.timeout=600 \
-                        -Dsonar.login=\$SONAR_TOKEN
-                    """
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        sonar-scanner \
+                            -Dsonar.projectKey=Onix-Website \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://172.30.56.3:9000 \
+                            -Dsonar.scanner.timeout=600 \
+                            -Dsonar.login=\$SONAR_TOKEN
+                        """
+                    }
                 }         
             }
         }

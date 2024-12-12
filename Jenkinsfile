@@ -20,7 +20,7 @@ pipeline {
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=http://35.165.3.57:9000 \
                                 -Dsonar.scanner.timeout=600 \
-                                -Dsonar.login=\$Sonar-T
+                                -Dsonar.login=${Sonar-T} 
                         """
                     }
                 }         

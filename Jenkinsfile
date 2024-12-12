@@ -57,14 +57,8 @@ pipeline {
                             ssh ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
                                 set -e  # Exit immediately if a command exits with a non-zero status
                                 
-                                # Pull the Docker image
-                                docker pull ${TRIVY_IMAGE}
-                                
                                 # Run Trivy to scan the Docker image and save the report
                                 trivy image --severity HIGH,MEDIUM --format table -o trivy-report.html ${TRIVY_IMAGE}
-                                
-                                # Optionally, you might want to print the report to console
-                                cat trivy-report.html
                             EOF
                         """
                     }

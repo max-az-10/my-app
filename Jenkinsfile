@@ -7,10 +7,9 @@ pipeline {
         IMAGE_TAG = 'latest'
         ECR_REPO = 'my-app-repo'
         ECR_REGISTRY = '381492139836.dkr.ecr.us-west-2.amazonaws.com'
-        //ECS_CLUSTER = ''
-        //ECS_SERVICE = ''
-        REMOTE_HOST = '35.165.3.57'
-        REMOTE_USER = 'ubuntu'
+        ECS_CLUSTER = 'my-app-cluster'
+        ECS_SERVICE = 'my-app-service'
+        ECS_TASK_DEF = 'my-app-taskdef'
         TRIVY_IMAGE = "${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
     }
     
@@ -51,11 +50,21 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'AWS-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {    
                     sh """
-                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 381492139836.dkr.ecr.us-west-2.amazonaws.com
-                        docker push 381492139836.dkr.ecr.us-west-2.amazonaws.com/my-app-repo:latest
+                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
+                        docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
                     """
                 }
             }
-        }    
+        }
+        stage('Deploy to ECS') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'AWS-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {    
+                    sh """
+                        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $ECS_TASK_DEF --force-new-deployment
+                    """
+                }
+            }
+        }
     }
 }
+
